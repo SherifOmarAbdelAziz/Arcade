@@ -12,17 +12,20 @@
 //#include "Circle.h"
 //#include "Screen.h"
 //#include <SDL2/SDL.h>
+
 #include <iostream>
-#include "App.h"
+#include "App/App.h"
 using namespace std;
 
 const int SCREEN_WIDTH = 224;
 const int SCREEN_HEIGHT = 288;
+// const int SCREEN_WIDTH = 1024;
+// const int SCREEN_HEIGHT = 1024;
 const int Magnification = 1;
 //void SetPixel(SDL_Surface *surface, uint32_t color, int x, int y);
 //size_t GetIndex(SDL_Surface *surface, int r, int c);
 
-int main() {
+int main(int argc, char* argv[]) {
 //    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0) {
 //        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
 //    }

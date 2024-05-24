@@ -23,20 +23,22 @@ public:
 	void draw(Screen& mscreen);
 
 	void MoveTo(const Vec2D &point);
-	inline void Stop() {VELOCITY = Vec2D::Zero();}
+	inline void Stop() {mVelocity = Vec2D::Zero();}
 
-	inline void SetVelocity(const Vec2D& v) {VELOCITY = v;}
-	inline Vec2D GetVelocity() {return VELOCITY;}
-	inline Vec2D GetPosition() {return mBox.GetCenterPoint();}
-	inline float GetRadius() {return radius;}
+	inline void SetVelocity(const Vec2D& v) {mVelocity = v;}
+	inline Vec2D GetVelocity() const {return mVelocity;}
+	inline Vec2D GetPosition() const {return mBox.GetCenterPoint();}
+	inline float GetRadius() const {return radius;}
 
 	inline const AARectangle GetBoundingRect() {return mBox;}
 
-	void MakeFlushWithEdge(const BoundaryEdge& mBoundaryEdge, Vec2D PointOnEdge,bool LimitToEdge);
+	void Bounce(const BoundaryEdge& edge);
+
+	void MakeFlushWithEdge(const BoundaryEdge& mBoundaryEdge, Vec2D& PointOnEdge,bool LimitToEdge);
 
 private:
 	AARectangle mBox;
-	Vec2D VELOCITY;
+	Vec2D mVelocity;
 
 	static const float radius;
 };

@@ -52,7 +52,8 @@ vector<Vec2D> AARectangle::GetPoints() {
 	return rect_points;
 }
 
-AARectangle AARectangle::inset(const AARectangle& rect, const Vec2D& p) {
+AARectangle AARectangle::inset(const AARectangle& rect, const Vec2D& p) 
+{
 	return AARectangle(rect.GetTopLeftPoint()+p, rect.GetWidth()- (2*p.GetVec2Dx()),
 			rect.GetHeight()- (2*p.GetVec2Dy())
 	);

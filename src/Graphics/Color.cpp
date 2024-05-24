@@ -111,6 +111,10 @@ Color Color::Black() {
 	return SDL_MapRGBA(Color::mFormat, 0, 0, 0, 0);
 }
 
+Color Color::White() {
+	return SDL_MapRGBA(Color::mFormat, 255, 255, 255, 0);
+}
+
 Color Color::AlphaBending(const Color &source, const Color &Destination) {
 
 	Color OutColor;

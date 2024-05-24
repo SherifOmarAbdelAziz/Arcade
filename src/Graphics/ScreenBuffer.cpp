@@ -6,6 +6,7 @@
  */
 
 #include "ScreenBuffer.h"
+#include <iostream>
 
 ScreenBuffer::ScreenBuffer() {
 	mSurface = nullptr;
@@ -26,7 +27,6 @@ void ScreenBuffer::SetPixel(const Color& color, uint32_t x, uint32_t y) {
 
 	uint32_t *pixels = (uint32_t *)mSurface->pixels;
 	size_t index = GetIndex(y, x);
-
 	Color surfaceColor = Color(pixels[index]);
 	pixels[index] = Color::AlphaBending(color, surfaceColor).GetPixelColor();
 

@@ -12,6 +12,8 @@
 #define UTILS_UTILS_H_
 
 #define EPSILON 0.001
+#define PI 3.14159
+#define TWO_PI ((float)(2.0f*PI))
 bool IsEqual(float one, float two);
 float MilliSecondstoSeconds (uint32_t dt);
 

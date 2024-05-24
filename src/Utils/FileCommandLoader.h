@@ -9,10 +9,11 @@
 #define UTILS_FILECOMMANDLOADER_H_
 
 #include <string>
+#include <vector>
+#include <functional>
 #include "Color.h"
 #include "Vec2D.h"
-#include <functional>
-#include <vector>
+
 using namespace std;
 
 

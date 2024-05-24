@@ -6,14 +6,13 @@
  */
 
 #include "Screen.h"
-#include <iostream>
-using namespace std;
-#include "Vec2D.h"
-#include "math.h"
+#include <math.h>
 #include <algorithm>
 #include <iostream>
+#include "Vec2D.h"
 
 using namespace std;
+
 Screen::Screen() : mwidth(0), mheight(0), window(nullptr), image(nullptr) {
 	// TODO Auto-generated constructor stub
 
@@ -78,120 +77,156 @@ void Screen::ClearScreen() {
 	SDL_FillRect(image, nullptr, mClearColor.GetPixelColor());
 }
 
-void Screen::draw(uint32_t x, uint32_t y, Color mColor) {
-	mBackBuffer.SetPixel(mColor, x, y);
+void Screen::draw(uint32_t x, uint32_t y, Color color) {
+	mBackBuffer.SetPixel(color, x, y);
 }
 
-void Screen::draw(Line mLine, Color mColor) {
-
-	int x0 = roundf(mLine.Getmp0().GetVec2Dx());
-	int y0 = roundf(mLine.Getmp0().GetVec2Dy());
-	int x1 = roundf(mLine.Getmp1().GetVec2Dx());
-	int y1 = roundf(mLine.Getmp1().GetVec2Dy());
-
-//	cout<<"x0:"<<x0<<endl;
-//	cout<<"y0:"<<y0<<endl;
-//	cout<<"x1:"<<x1<<endl;
-//	cout<<"y1:"<<mLine.Getmp1().GetVec2Dy()<<endl;
+void Screen::draw(Line line, Color color) 
+{
+	int x0 = roundf(line.Getmp0().GetVec2Dx());
+	int y0 = roundf(line.Getmp0().GetVec2Dy());
+	int x1 = roundf(line.Getmp1().GetVec2Dx());
+	int y1 = roundf(line.Getmp1().GetVec2Dy());
 
 	int dx = x1 - x0;
-	int dy = y1 - y0;
+	int dy = y1 - y0;	
 
 	signed const char ix((dx>0) - (dx<0)); // 1 or -1
 	signed const char iy((dy>0) - (dy<0));
 
 	dx = abs(dx) * 2;
 	dy = abs(dy) * 2;
+	draw(x0, y0, color);
 
-	draw(x0, y0, mColor);
-
-	if(dx >= dy) {
+	if(dx >= dy) 
+	{
 		int d = dy - dx/2;
-		while (x0 != x1) {
-			if (d >= 0) {
-				y0 += iy;
+		while (x0 != x1) 
+		{
+			if (d >= 0) 
+			{
 				d -= dx;
+				y0 += iy;
 			}
-
 			d += dy;
-			x0 += ix;
-			draw(x0, y0, mColor);
+			x0 += ix;		
+			draw(x0, y0, color);
 		}
-
 	}
-	else {
+	else 
+	{
 		int d = dx - dy/2;
-		while (y0 != y1) {
-			if (d >=0) {
-				x0 += ix;
+		while (y0 != y1) 
+		{
+			if (d >=0) 
+			{
 				d -= dy;
+				x0 += ix;
 			}
-
 			d += dx;
-			y0 += iy;
-			draw(x0, y0, mColor);
+			y0 += iy;		
+			draw(x0, y0, color);			
 		}
 	}
 }
 
-void Screen::draw(Triangle Tri, Color mColor, bool fillColor, Color Colorfilling) {
-
+void Screen::draw(Triangle triangle, Color color, bool fillColor, Color colorFilling) 
+{
 	if (fillColor == true) {
-		FillPoly(Tri.GetPoints(), Colorfilling);
+		FillPoly(triangle.GetPoints(), colorFilling);
 	}
 
 	Line myLine;
-	myLine.Setmp0(Vec2D(Tri.GetP0().GetVec2Dx(),Tri.GetP0().GetVec2Dy()));
-	myLine.Setmp1(Vec2D(Tri.GetP1().GetVec2Dx(),Tri.GetP1().GetVec2Dy()));
-	draw(myLine, mColor);
-	myLine.Setmp0(Vec2D(Tri.GetP1().GetVec2Dx(),Tri.GetP1().GetVec2Dy()));
-	myLine.Setmp1(Vec2D(Tri.GetP2().GetVec2Dx(),Tri.GetP2().GetVec2Dy()));
-	draw(myLine, mColor);
-	myLine.Setmp0(Vec2D(Tri.GetP2().GetVec2Dx(),Tri.GetP2().GetVec2Dy()));
-	myLine.Setmp1(Vec2D(Tri.GetP0().GetVec2Dx(),Tri.GetP0().GetVec2Dy()));
-	draw(myLine, mColor);
+	myLine.Setmp0(Vec2D(triangle.GetP0().GetVec2Dx(),triangle.GetP0().GetVec2Dy()));
+	myLine.Setmp1(Vec2D(triangle.GetP1().GetVec2Dx(),triangle.GetP1().GetVec2Dy()));
+	draw(myLine, color);
+	myLine.Setmp0(Vec2D(triangle.GetP1().GetVec2Dx(),triangle.GetP1().GetVec2Dy()));
+	myLine.Setmp1(Vec2D(triangle.GetP2().GetVec2Dx(),triangle.GetP2().GetVec2Dy()));
+	draw(myLine, color);
+	myLine.Setmp0(Vec2D(triangle.GetP2().GetVec2Dx(),triangle.GetP2().GetVec2Dy()));
+	myLine.Setmp1(Vec2D(triangle.GetP0().GetVec2Dx(),triangle.GetP0().GetVec2Dy()));
+	draw(myLine, color);
 }
 
-void Screen::draw(AARectangle rect, Color mColor, bool fillColor, Color Colorfilling) {
-
+void Screen::draw(AARectangle rect, Color color, bool fillColor, Color colorFilling) 
+{
 	if (fillColor == true) {
-		FillPoly(rect.GetPoints(), Colorfilling);
+		FillPoly(rect.GetPoints(), colorFilling);
 	}
 
 	vector<Vec2D> GetRectPoints = rect.GetPoints();
 	Line myLine;
 	myLine.Setmp0(Vec2D(GetRectPoints[0].GetVec2Dx(),GetRectPoints[0].GetVec2Dy()));
 	myLine.Setmp1(Vec2D(GetRectPoints[1].GetVec2Dx(),GetRectPoints[1].GetVec2Dy()));
-	draw(myLine, mColor);
+	draw(myLine, color);
 	myLine.Setmp0(Vec2D(GetRectPoints[1].GetVec2Dx(),GetRectPoints[1].GetVec2Dy()));
 	myLine.Setmp1(Vec2D(GetRectPoints[2].GetVec2Dx(),GetRectPoints[2].GetVec2Dy()));
-	draw(myLine, mColor);
+	draw(myLine, color);
 	myLine.Setmp0(Vec2D(GetRectPoints[2].GetVec2Dx(),GetRectPoints[2].GetVec2Dy()));
 	myLine.Setmp1(Vec2D(GetRectPoints[3].GetVec2Dx(),GetRectPoints[3].GetVec2Dy()));
-	draw(myLine, mColor);
+	draw(myLine, color);
 	myLine.Setmp0(Vec2D(GetRectPoints[3].GetVec2Dx(),GetRectPoints[3].GetVec2Dy()));
 	myLine.Setmp1(Vec2D(GetRectPoints[0].GetVec2Dx(),GetRectPoints[0].GetVec2Dy()));
-	draw(myLine, mColor);
+	draw(myLine, color);
 }
 
-void Screen::draw(Circle Circ, Color mColor, bool fillColor, Color Colorfilling) {
+void Screen::draw(Circle circle, Color color, bool fillColor, Color colorFilling) 
+{
 	uint32_t x1 = 0;
 	uint32_t y1 = 0;
 
-	vector<Vec2D> points;
+	vector<Vec2D> circlePoints;
 
 	float degree = 0;
-	while (degree<360.0) {
-		x1 = Circ.GetCenterPoint().GetVec2Dx() + (Circ.GetRadius()*cos ( (degree * 3.14159) / 180.0 ));
-		y1 = Circ.GetCenterPoint().GetVec2Dy() + (Circ.GetRadius()*sin ( (degree * 3.14159) / 180.0 ));
-		points.push_back(Vec2D(x1,y1));
-		draw(x1, y1, mColor);
+	
+	while (degree<360.0) 
+	{
+		x1 = circle.GetCenterPoint().GetVec2Dx() + (circle.GetRadius()*cos ( (degree * 3.14159) / 180.0 ));
+		double sin_value = (circle.GetRadius()*sin ( (degree * 3.14159) / 180.0 ));
+		// std::cout<<"sin_value = "<<sin_value<<std::endl;
+		double positiony = circle.GetCenterPoint().GetVec2Dy();
+		// std::cout<<"positiony = "<<positiony<<std::endl;
+		int32_t temp_value_for_y = (int32_t) (sin_value + positiony);
+		// if(temp_value_for_y <= 0) y1 = 100; else y1 = (uint32_t) temp_value_for_y;
+		y1 = circle.GetCenterPoint().GetVec2Dy() + (circle.GetRadius()*sin ( (degree * 3.14159) / 180.0 ));
+		// std::cout<<"y1 = "<<y1<<std::endl;
+		circlePoints.push_back(Vec2D(x1,y1));
+		draw(x1, y1, color);
 		degree += 0.1;
 	}
 
-	if (fillColor == true) {
-		FillPoly(points, Colorfilling);
+	// vector<Vec2D> circlePoints;
+	// vector<Line> lines;
+	// Line nextLineToDraw;
+	// static unsigned int NUM_CIRCLE_SEGMENTS = 30;
+	// float angle = (TWO_PI / (float)(NUM_CIRCLE_SEGMENTS));
+	// Vec2D p0 = Vec2D(circle.GetCenterPoint().GetVec2Dx() + circle.GetRadius(), circle.GetCenterPoint().GetVec2Dy()); 
+	// Vec2D p1 = p0;
+
+	// for(unsigned int segment = 0; segment < NUM_CIRCLE_SEGMENTS; ++segment)
+	// {
+	// 	// rotate p1
+	// 	p1.Rotate(angle, circle.GetCenterPoint());
+	// 	nextLineToDraw.Setmp0(p0);
+	// 	nextLineToDraw.Setmp1(p1);
+	// 	lines.push_back(nextLineToDraw);
+	// 	if(p1.GetVec2Dx() < 288 && p1.GetVec2Dy() < 288	)	
+	// 	{
+	// 		p0 = p1;
+	// 	}
+	// 	else break;
+		
+	// }
+
+	if (true == fillColor) {
+		FillPoly(circlePoints, colorFilling);
 	}
+	// for (const auto line : lines)
+	// {
+	// 	{		
+	// 		draw(line, color);
+	// 	}
+	// }
 }
 
 void Screen::FillPoly(vector<Vec2D> points, Color mColor) {

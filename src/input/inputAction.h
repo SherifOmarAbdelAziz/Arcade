@@ -10,6 +10,7 @@
 
 
 #include <functional>
+#include <stdint.h>
 
 using inputKey = uint8_t;
 using inputState = uint8_t;

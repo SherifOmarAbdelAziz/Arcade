@@ -19,7 +19,7 @@ public:
 	Vec2D GetCollisionOffset(const AARectangle& Rect);
 
 	const AARectangle& GetAARectangle () const;
-	BoundaryEdge& GetBoundaryEdge(const EdgeType& Edge);
+	BoundaryEdge& GetBoundaryEdge(const EdgeType& edgeType);
 	void MoveBy (Vec2D& delta);
 	void MoveTo (Vec2D& point);
 

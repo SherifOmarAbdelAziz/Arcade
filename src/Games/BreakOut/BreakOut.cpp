@@ -9,9 +9,10 @@
 #include <iostream>
 #include "App.h"
 
+
 void BreakOut::Init(GameController& controller) {
 	//cout<<"BreakOut Init"<<endl;
-	ResetPaddle();
+	ResetGame();
 	ButtonAction action;
 	action.Key = GameController::left();
 	action.Action = [this](uint32_t dt, inputState state) {
@@ -42,12 +43,22 @@ void BreakOut::Init(GameController& controller) {
 void BreakOut::Update(uint32_t dt) {
 	mPaddle.update(dt);
 	mBall.update(dt);
-	//cout<<"BreakOut Update"<<endl;
+
+	BoundaryEdge edge;
+	if (mLevelBoundary.HasCollided(mBall, edge))
+	{
+		cout<<"Collision detected"<<endl;
+		mBall.Bounce(edge);
+	}
+	
+	// cout<<"BreakOut Update"<<endl;
 }
 
-void BreakOut::Draw(Screen& mScreen) {
-	mPaddle.draw(mScreen);
-	mBall.draw(mScreen);
+void BreakOut::Draw(Screen& screen) 
+{
+	mPaddle.draw(screen);
+	mBall.draw(screen);
+	screen.draw(mLevelBoundary.GetAARectangle(), Color::White(), false, Color::Black());
 	//cout<<"BreakOut Draw"<<endl;
 }
 
@@ -56,13 +67,16 @@ const string& BreakOut::GetName() {
 	return name;
 }
 
-void BreakOut::ResetPaddle() {
+void BreakOut::ResetGame() 
+{
+	Vec2D TopLeft = Vec2D( (App::Singleton().Width()/2) - (paddle_width/2), App::Singleton().Height()-(3*paddle_height) );
+	AARectangle paddleBoundary(TopLeft, paddle_width, paddle_height);
 
-	Vec2D TopLeft, BottomRight;
-	TopLeft = Vec2D( (App::Singleton().Width()/2) - (paddle_width/2), App::Singleton().Height()-(3*paddle_height) );
-	AARectangle rect(TopLeft, paddle_width, paddle_height);
+	AARectangle GameBoundary = AARectangle(Vec2D::Zero(), App::Singleton().Width(), App::Singleton().Height());
+	
+	mLevelBoundary = GameBoundary;
 
-	AARectangle GameBoundary = AARectangle(Vec2D(0,0) , App::Singleton().Width(), App::Singleton().Height());
-	mPaddle.Init(rect, GameBoundary);
+	mPaddle.Init(paddleBoundary, GameBoundary);
 	mBall.MoveTo(Vec2D(App::Singleton().Width()/2, App::Singleton().Height()/2));
+	mBall.SetVelocity(INITIAL_BALL_VELOCITY);
 }

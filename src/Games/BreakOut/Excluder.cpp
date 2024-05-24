@@ -7,19 +7,21 @@
 
 #include <Excluder.h>
 
-void Excluder::Init(const AARectangle& Rect, bool mReverse) {
+void Excluder::Init(const AARectangle& rect, bool mReverse) {
 	//mRect = Rect;
-	mRect.setTopLeftPoint(Vec2D(Rect.GetTopLeftPoint().GetVec2Dx(), Rect.GetTopLeftPoint().GetVec2Dy()));
-	mRect.setBottomRightPoint(Rect.GetBottomRightPoint());
+	// mRect.setTopLeftPoint(Vec2D(Rect.GetTopLeftPoint().GetVec2Dx(), Rect.GetTopLeftPoint().GetVec2Dy()));
+	mRect.setTopLeftPoint(rect.GetTopLeftPoint());
+	mRect.setBottomRightPoint(rect.GetBottomRightPoint());
 	//cout<<mRect.GetTopLeftPoint().GetVec2Dx()<<", "<<mRect.GetTopLeftPoint().GetVec2Dy()<<endl;
 	mReverseNormals = mReverse;
 	setupEdges();
 }
 
-bool Excluder::DetectCollision(const AARectangle& Rect, BoundaryEdge& edge) {
-
-	if(mRect.intersects(Rect)) {
-
+bool Excluder::DetectCollision(const AARectangle& Rect, BoundaryEdge& edge) 
+{
+	bool retVal = false;
+	if(mRect.intersects(Rect)) 
+	{
 		float ymin, ymax, xmin, xmax, xsize, ysize;
 		ymin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
 		ymax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? mRect.GetBottomRightPoint().GetVec2Dy() : Rect.GetBottomRightPoint().GetVec2Dy();
@@ -30,7 +32,8 @@ bool Excluder::DetectCollision(const AARectangle& Rect, BoundaryEdge& edge) {
 		xsize = xmax - xmin;
 		ysize = ymax - ymin;
 
-		if (ysize > xsize) {
+		if (ysize > xsize) 
+		{
 			if(mRect.GetCenterPoint().GetVec2Dx() >= Rect.GetCenterPoint().GetVec2Dx()) {
 				edge = mEdge[LEFT_EDGE];
 			}
@@ -39,7 +42,8 @@ bool Excluder::DetectCollision(const AARectangle& Rect, BoundaryEdge& edge) {
 			}
 		}
 
-		else {
+		else 
+		{
 			if(mRect.GetCenterPoint().GetVec2Dy() >= Rect.GetCenterPoint().GetVec2Dy()) {
 				edge = mEdge[UPPER_EDGE];
 			}
@@ -47,18 +51,20 @@ bool Excluder::DetectCollision(const AARectangle& Rect, BoundaryEdge& edge) {
 				edge = mEdge[BOTTOM_EDGE];
 			}
 		}
-
-		return true;
+		retVal = true;
 	}
-
 	else
-		return false;
+		retVal = false;
+
+	return retVal;
 }
 
-Vec2D Excluder::GetCollisionOffset(const AARectangle& Rect) {
+Vec2D Excluder::GetCollisionOffset(const AARectangle& Rect) 
+{
 	BoundaryEdge myedge;
 	Vec2D Offset;
-	if (DetectCollision(Rect,myedge)) {
+	if (DetectCollision(Rect,myedge)) 
+	{
 		float ymin, ymax, xmin, xmax, xsize, ysize;
 		ymin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
 		ymax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? Rect.GetBottomRightPoint().GetVec2Dy() : mRect.GetBottomRightPoint().GetVec2Dy();
@@ -69,10 +75,12 @@ Vec2D Excluder::GetCollisionOffset(const AARectangle& Rect) {
 		xsize = xmax - xmin;
 		ysize = ymax - ymin;
 
-		if (!IsEqual(myedge.normal.GetVec2Dy(), 0)) {
+		if (!IsEqual(myedge.normal.GetVec2Dy(), 0)) 
+		{
 			Offset = myedge.normal * (ysize+1);
 		}
-		else {
+		else 
+		{
 			Offset = myedge.normal  * (xsize+1);
 		}
 	}
@@ -83,8 +91,8 @@ const AARectangle& Excluder::GetAARectangle () const {
 	return mRect;
 }
 
-BoundaryEdge& Excluder::GetBoundaryEdge(const EdgeType& Edge) {
-	return mEdge[Edge];
+BoundaryEdge& Excluder::GetBoundaryEdge(const EdgeType& edgeType) {
+	return mEdge[edgeType];
 }
 
 void Excluder::MoveBy (Vec2D& delta) {
@@ -99,24 +107,28 @@ void Excluder::MoveTo (Vec2D& point) {
 
 void Excluder::setupEdges() {
 	Line mLine;
-	mLine.Setmp0(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
+	// mLine.Setmp0(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
+	mLine.Setmp0(mRect.GetTopLeftPoint());
 	mLine.Setmp1(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
-	mEdge[LEFT_EDGE].Edge = mLine;
+	mEdge[LEFT_EDGE].edge = mLine;
 	mEdge[LEFT_EDGE].normal = LEFT_DIR;
 
 	mLine.Setmp0(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
-	mLine.Setmp1(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
-	mEdge[RIGHT_EDGE].Edge = mLine;
+	// mLine.Setmp1(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
+	mLine.Setmp1(mRect.GetBottomRightPoint());
+	mEdge[RIGHT_EDGE].edge = mLine;
 	mEdge[RIGHT_EDGE].normal = RIGHT_DIR;
 
 	mLine.Setmp0(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
-	mLine.Setmp1(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
-	mEdge[BOTTOM_EDGE].Edge = mLine;
+	// mLine.Setmp1(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetBottomRightPoint().GetVec2Dy()));
+	mLine.Setmp1(mRect.GetBottomRightPoint());
+	mEdge[BOTTOM_EDGE].edge = mLine;
 	mEdge[BOTTOM_EDGE].normal = DOWN_DIR;
 
-	mLine.Setmp0(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
+	// mLine.Setmp0(Vec2D(mRect.GetTopLeftPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
+	mLine.Setmp0(mRect.GetTopLeftPoint());
 	mLine.Setmp1(Vec2D(mRect.GetBottomRightPoint().GetVec2Dx(),mRect.GetTopLeftPoint().GetVec2Dy()));
-	mEdge[UPPER_EDGE].Edge = mLine;
+	mEdge[UPPER_EDGE].edge = mLine;
 	mEdge[UPPER_EDGE].normal = UP_DIR;
 
 	if (mReverseNormals) {

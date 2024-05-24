@@ -27,11 +27,16 @@ public:
 		return v;
 	}
 
-	float Dot (const Vec2D &v) const {
-		float f = 0;
-		f = mpx*v.mpx + mpy*v.mpy;
-		return f;
-	}
+	float Dot(const Vec2D& v) const;
+
+	Vec2D GetUnitVec() const;
+	Vec2D Normalize();
+
+	Vec2D ProjectOnto(const Vec2D& vec2) const;
+	float AngleBetween(const Vec2D& vec) const;
+	Vec2D Reflect(const Vec2D& nromal) const;
+	void Rotate(float angle, Vec2D PointToRotateAround);
+	Vec2D RotatationResult(float angle, Vec2D PointToRotateAround) const;
 
 	Vec2D operator* (const float f) const;
 	//Vec2D& operator= (const Vec2D &v);
@@ -39,6 +44,10 @@ public:
 
 	Vec2D operator+ (const Vec2D &v) const;
 	Vec2D operator- (const Vec2D &v) const;
+	Vec2D operator-= (const Vec2D &v);
+
+	Vec2D operator/ (const float& f) const;
+	Vec2D operator/= (const float& f);
 
 	float mag() const;
 	float mag2() const;

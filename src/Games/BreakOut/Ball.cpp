@@ -5,11 +5,11 @@
  *      Author: sherif
  */
 
-#include <Ball.h>
+#include "Ball.h"
 #include "Circle.h"
 #include "Color.h"
 #include "BoundaryEdge.h"
-//#include <iostream>
+#include <iostream>
 
 const float Ball::radius = 5.0f;
 
@@ -19,7 +19,7 @@ Ball::Ball() : Ball(Vec2D::Zero(), Ball::radius) {
 
 }
 
-Ball::Ball(const Vec2D& pos, float mradius) : VELOCITY(Vec2D::Zero()) {
+Ball::Ball(const Vec2D& pos, float mradius) : mVelocity(Vec2D::Zero()) {
 
 	mBox = AARectangle(Vec2D(pos.GetVec2Dx(), pos.GetVec2Dy()), radius*2.0F, radius*2.0F);
 }
@@ -29,8 +29,8 @@ void Ball::update(uint32_t dt) {
 }
 
 void Ball::draw(Screen& mscreen) {
-	Circle Circ(GetPosition(), GetRadius());
-	mscreen.draw(Circ, Color::Red(), true, Color::Red());
+	Circle circle(GetPosition(), GetRadius());
+	mscreen.draw(circle, Color::Red(), true, Color::Red());
 }
 
 void Ball::MoveTo(const Vec2D &point) {
@@ -38,19 +38,28 @@ void Ball::MoveTo(const Vec2D &point) {
 	mBox.MoveTo(Vec2D(point.GetVec2Dx()-radius, point.GetVec2Dy()-radius));
 }
 
-void Ball::MakeFlushWithEdge(const BoundaryEdge& mBoundaryEdge, Vec2D PointOnEdge,bool LimitToEdge) {
-	if (mBoundaryEdge.normal == UP_DIR) {
-		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(),mBoundaryEdge.Edge.Getmp0().GetVec2Dy()-mBox.GetHeight()));
+void Ball::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& PointOnEdge, bool LimitToEdge) {
+	if (edge.normal == UP_DIR) {
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), edge.edge.Getmp0().GetVec2Dy()+mBox.GetHeight()));
 	}
-	else if (mBoundaryEdge.normal == DOWN_DIR) {
-		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(),mBoundaryEdge.Edge.Getmp0().GetVec2Dy()+mBox.GetHeight()));
+	else if (edge.normal == DOWN_DIR) {
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), mBox.GetBottomRightPoint().GetVec2Dy()-mBox.GetHeight()));
 	}
-	else if (mBoundaryEdge.normal == LEFT_DIR) {
-		mBox.MoveTo(Vec2D(mBoundaryEdge.Edge.Getmp0().GetVec2Dx()-mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+	else if (edge.normal == LEFT_DIR) {
+		mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()+mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
 	}
-	else if (mBoundaryEdge.normal == RIGHT_DIR) {
-		mBox.MoveTo(Vec2D(mBoundaryEdge.Edge.Getmp0().GetVec2Dx()+mBoundaryEdge.normal.GetVec2Dx(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+	else if (edge.normal == RIGHT_DIR) {
+		// mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()+ edge.normal.GetVec2Dx(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx()-mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
 	}
-	PointOnEdge = mBoundaryEdge.Edge.ClosestPoint(mBox.GetCenterPoint(),LimitToEdge);
+	PointOnEdge = edge.edge.ClosestPoint(mBox.GetCenterPoint(),LimitToEdge);
 }
 
+void Ball::Bounce(const BoundaryEdge& edge)
+{
+	Vec2D pointOnEdge;
+
+	MakeFlushWithEdge(edge, pointOnEdge, false);
+	
+	mVelocity = mVelocity.Reflect(edge.normal);
+}

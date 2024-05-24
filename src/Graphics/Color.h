@@ -47,6 +47,7 @@ public:
 	static Color Blue();
 	static Color Green();
 	static Color Black();
+	static Color White();
 	static Color AlphaBending(const Color &source, const Color &Destination);
 };
 

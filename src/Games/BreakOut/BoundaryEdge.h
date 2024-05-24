@@ -27,7 +27,7 @@ static Vec2D RIGHT_DIR = Vec2D(1, 0);
 
 struct BoundaryEdge {
 	Vec2D normal;
-	Line Edge;
+	Line edge;
 };
 
 

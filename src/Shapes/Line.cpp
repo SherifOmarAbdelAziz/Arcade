@@ -7,17 +7,18 @@
 
 #include <Line.h>
 
-Vec2D Line::ClosestPoint(const Vec2D &v, bool limitToSegment = false) const {
-	float temp =  mp0.Dot(v);
-	Vec2D mp0tov = v - mp0;
-	Vec2D mp0tomp1 = mp1 - mp0;
-	float t = temp/mp0tov.mag();
+Vec2D Line::ClosestPoint(const Vec2D &point, bool limitToSegment = false) const {
+	
+	Vec2D p02point = point - mp0;
+	Vec2D p02p1 = mp1 - mp0;
+	float distanceOnLine = p02point.Dot(p02p1);
+	float p02p1Magnitude = p02p1.mag2();
 
+	float distanceNorm = distanceOnLine/p02p1Magnitude; 
 	if(limitToSegment)
 	{
-		t = std::fmax(0, std::fmin(1.0f, t));
-	}
-
-	return mp0 + (mp0tomp1 * t);
+		distanceNorm = std::fmax(0, std::fmin(1.0f, distanceNorm));
+	}	
+	return (mp0 + (p02p1 * distanceNorm));
 }
 

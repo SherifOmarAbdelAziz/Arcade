@@ -8,17 +8,18 @@
 #ifndef APP_APP_H_
 #define APP_APP_H_
 
-#include "Color.h"
-#include "Line.h"
-#include "Triangle.h"
-#include "AARectangle.h"
-#include "Circle.h"
-#include "Screen.h"
-#include "Scene.h"
-#include "InputController.h"
 #include <SDL2/SDL.h>
 #include <memory>
 #include <iostream>
+// #include "Color.h"
+// #include "Line.h"
+// #include "Triangle.h"
+// #include "AARectangle.h"
+// #include "Circle.h"
+// #include "Screen.h"
+#include "Scene.h"
+#include "InputController.h"
+
 using namespace std;
 
 class App {

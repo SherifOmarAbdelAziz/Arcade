@@ -5,12 +5,13 @@
  *      Author: sherif
  */
 
+#include <memory.h>
+#include <iostream>
 #include "App.h"
-#include "memory.h"
 #include "ArcadeScene.h"
 #include "BreakOut.h"
 #include "GameScene.h"
-#include <iostream>
+
 using namespace std;
 
 App& App::Singleton() {
@@ -46,7 +47,8 @@ void App::Run() {
     bool running = true;
     CurrentInputController.Init([&running](uint32_t dt, uint8_t state){running = false;});
 
-    while(running) {
+    while(running) 
+	{
     	CurrentTick = SDL_GetTicks();
     	FrameTime = CurrentTick - lastTick;
     	if (FrameTime > 300)

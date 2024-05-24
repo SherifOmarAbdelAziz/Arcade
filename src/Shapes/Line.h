@@ -28,10 +28,10 @@ public:
 	Vec2D Getmp0() const {return mp0;}
 	Vec2D Getmp1() const {return mp1;}
 
-	float minDistanceFrom(const Vec2D &v) {
-		return mp0.Distance(ClosestPoint(v, true));
+	float minDistanceFrom(const Vec2D &v) const {
+		return v.Distance(ClosestPoint(v, true));
 	}
-	Vec2D ClosestPoint(const Vec2D &v, bool limitToSegment) const;
+	Vec2D ClosestPoint(const Vec2D &point, bool limitToSegment) const;
 
 	float Length() {
 		return mp0.Distance(mp1);
