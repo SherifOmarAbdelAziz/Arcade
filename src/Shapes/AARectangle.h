@@ -54,7 +54,7 @@ public:
 	Vec2D GetTopLeftPoint() const {return mPoints[0];}
 	Vec2D GetBottomRightPoint() const {return mPoints[1];}
 
-	bool ContainsPoint(const Vec2D &p);
+	bool ContainsPoint(const Vec2D &p) const;
 	void MoveTo(const Vec2D &p);
 	bool intersects(const AARectangle& rect) const;
 	virtual Vec2D GetCenterPoint() const;

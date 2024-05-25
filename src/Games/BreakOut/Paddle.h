@@ -10,6 +10,7 @@
 
 #include "Excluder.h"
 #include "Screen.h"
+#include "Ball.h"
 
 enum PaddleDirection {
 	//NONE = 0,
@@ -21,8 +22,9 @@ class Paddle : public Excluder {
 public:
 
 	void Init(const AARectangle& Rect, const AARectangle& Boundary);
-	void update(uint32_t dt);
+	void update(uint32_t dt, Ball& ball);
 	void draw(Screen &mScreen);
+	bool Bounce(Ball& ball);
 
 	inline bool IsMovingLeft() {return mPaddleDirection == PaddleDirection::LEFT;}
 	inline bool IsMovingRight() {return mPaddleDirection == PaddleDirection::RIGHT;}
@@ -37,7 +39,7 @@ public:
 private:
 	uint32_t mPaddleDirection;
 	const float VELOCITY = 150.0f;
-
+	const float CORNER_BOUNCE_AMT = 0.2f;
 	AARectangle mBoundary;
 
 };

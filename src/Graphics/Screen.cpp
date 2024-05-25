@@ -182,14 +182,7 @@ void Screen::draw(Circle circle, Color color, bool fillColor, Color colorFilling
 	while (degree<360.0) 
 	{
 		x1 = circle.GetCenterPoint().GetVec2Dx() + (circle.GetRadius()*cos ( (degree * 3.14159) / 180.0 ));
-		double sin_value = (circle.GetRadius()*sin ( (degree * 3.14159) / 180.0 ));
-		// std::cout<<"sin_value = "<<sin_value<<std::endl;
-		double positiony = circle.GetCenterPoint().GetVec2Dy();
-		// std::cout<<"positiony = "<<positiony<<std::endl;
-		int32_t temp_value_for_y = (int32_t) (sin_value + positiony);
-		// if(temp_value_for_y <= 0) y1 = 100; else y1 = (uint32_t) temp_value_for_y;
 		y1 = circle.GetCenterPoint().GetVec2Dy() + (circle.GetRadius()*sin ( (degree * 3.14159) / 180.0 ));
-		// std::cout<<"y1 = "<<y1<<std::endl;
 		circlePoints.push_back(Vec2D(x1,y1));
 		draw(x1, y1, color);
 		degree += 0.1;

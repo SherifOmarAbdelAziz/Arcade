@@ -5,8 +5,9 @@
  *      Author: sherif
  */
 
-#include <AARectangle.h>
 #include <vector>
+#include <iostream>
+#include "AARectangle.h"
 
 void AARectangle::MoveTo(const Vec2D &p) {
 	//float w = GetWidth();
@@ -14,27 +15,29 @@ void AARectangle::MoveTo(const Vec2D &p) {
 	setTopLeftPoint(p);
 }
 
-bool AARectangle::ContainsPoint(const Vec2D &p) {
+bool AARectangle::ContainsPoint(const Vec2D &p) const 
+{
 	return (
 			(p.GetVec2Dx() >= GetTopLeftPoint().GetVec2Dx()) &&
 			(p.GetVec2Dx() <= GetBottomRightPoint().GetVec2Dx()) &&
 			(p.GetVec2Dy() >= GetTopLeftPoint().GetVec2Dy()) &&
 			(p.GetVec2Dy() <= GetBottomRightPoint().GetVec2Dy())
-					);
+			);
 }
 
-bool AARectangle::intersects(const AARectangle& rect) const {
+bool AARectangle::intersects(const AARectangle& rect) const 
+{
 	return !(
 		(GetTopLeftPoint().GetVec2Dx() >  rect.GetBottomRightPoint().GetVec2Dx()) ||
 		(GetBottomRightPoint().GetVec2Dx() <  rect.GetTopLeftPoint().GetVec2Dx()) ||
 		(GetTopLeftPoint().GetVec2Dy() >  rect.GetBottomRightPoint().GetVec2Dy()) ||
 		(GetBottomRightPoint().GetVec2Dy() <  rect.GetTopLeftPoint().GetVec2Dy())
-	);
+			);
 }
 
 Vec2D AARectangle::GetCenterPoint() const {
-	return Vec2D(0.5*(GetTopLeftPoint().GetVec2Dx()+GetWidth())
-		,0.5*(GetTopLeftPoint().GetVec2Dy()+GetHeight()));
+	return Vec2D((GetTopLeftPoint().GetVec2Dx()+(GetWidth()/2))
+		,(GetTopLeftPoint().GetVec2Dy()+(GetHeight()/2)));
 }
 
 vector<Vec2D> AARectangle::GetPoints() {

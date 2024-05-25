@@ -40,17 +40,21 @@ void Ball::MoveTo(const Vec2D &point) {
 
 void Ball::MakeFlushWithEdge(const BoundaryEdge& edge, Vec2D& PointOnEdge, bool LimitToEdge) {
 	if (edge.normal == UP_DIR) {
-		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), edge.edge.Getmp0().GetVec2Dy()+mBox.GetHeight()));
+		// mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), edge.edge.Getmp0().GetVec2Dy()+mBox.GetHeight()));
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), edge.edge.Getmp0().GetVec2Dy()-mBox.GetHeight()));
 	}
 	else if (edge.normal == DOWN_DIR) {
-		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), mBox.GetBottomRightPoint().GetVec2Dy()-mBox.GetHeight()));
+		// mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), mBox.GetBottomRightPoint().GetVec2Dy()-mBox.GetHeight()));
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx(), edge.edge.Getmp0().GetVec2Dy()+mBox.GetHeight()));
 	}
 	else if (edge.normal == LEFT_DIR) {
-		mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()+mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+		// mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()+mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+		mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()-mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
 	}
 	else if (edge.normal == RIGHT_DIR) {
 		// mBox.MoveTo(Vec2D(edge.edge.Getmp0().GetVec2Dx()+ edge.normal.GetVec2Dx(), mBox.GetTopLeftPoint().GetVec2Dy()) );
-		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx()-mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+		// mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx()-mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
+		mBox.MoveTo(Vec2D(mBox.GetTopLeftPoint().GetVec2Dx()+mBox.GetWidth(), mBox.GetTopLeftPoint().GetVec2Dy()) );
 	}
 	PointOnEdge = edge.edge.ClosestPoint(mBox.GetCenterPoint(),LimitToEdge);
 }

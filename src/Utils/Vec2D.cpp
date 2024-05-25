@@ -132,14 +132,11 @@ void Vec2D::Rotate(float angle, Vec2D PointToRotateAround)
 	float x_rotated = thisVec.GetVec2Dx()*cosine - thisVec.GetVec2Dy()*sine;
 	// y_rotated = x*-sin(angle) + y*cos(angle)
 	float y_rotated = thisVec.GetVec2Dx()*sine + thisVec.GetVec2Dy()*cosine;
-	// std::cout<<"x_rotated = "<<x_rotated<<std::endl;
-	// std::cout<<"y_rotated = "<<y_rotated<<std::endl;
+	
 	Vec2D rotated_point = Vec2D(x_rotated, y_rotated);
 
 	// increment vec2d by PointToRotateAround
 	*this = rotated_point + PointToRotateAround;
-	// std::cout<<"x = "<<this->GetVec2Dx()<<std::endl;
-	// std::cout<<"y = "<<this->GetVec2Dy()<<std::endl;
 }
 
 Vec2D Vec2D::RotatationResult(float angle, Vec2D PointToRotateAround) const

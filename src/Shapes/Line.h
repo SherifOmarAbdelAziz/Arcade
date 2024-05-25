@@ -51,6 +51,8 @@ public:
 		return dy/dx;
 	}
 
+	inline bool operator==(const Line& line) const {return (mp0==line.mp0 && mp1==line.mp1);}
+
 private:
 	Vec2D mp0;
 	Vec2D mp1;

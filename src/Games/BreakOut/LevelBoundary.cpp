@@ -11,7 +11,7 @@
 
 LevelBoundary::LevelBoundary(const AARectangle &boundary)
 {
-    mIncluder.Init(boundary);
+    mIncluder.Init(boundary, true);
 }
 
 bool LevelBoundary::HasCollided(const Ball& ball, BoundaryEdge& edge)

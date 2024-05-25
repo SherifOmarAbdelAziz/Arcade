@@ -15,11 +15,11 @@ class Excluder {
 public:
 	virtual ~Excluder() {}
 	void Init(const AARectangle& Rect, bool mReverse = false);
-	bool DetectCollision(const AARectangle& Rect, BoundaryEdge& edge);
+	bool HasCollided(const AARectangle& Rect, BoundaryEdge& edge);
 	Vec2D GetCollisionOffset(const AARectangle& Rect);
 
 	const AARectangle& GetAARectangle () const;
-	BoundaryEdge& GetBoundaryEdge(const EdgeType& edgeType);
+	const BoundaryEdge& GetBoundaryEdge(const EdgeType& edgeType) const;
 	void MoveBy (Vec2D& delta);
 	void MoveTo (Vec2D& point);
 

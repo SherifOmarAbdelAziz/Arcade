@@ -41,14 +41,20 @@ void BreakOut::Init(GameController& controller) {
 }
 
 void BreakOut::Update(uint32_t dt) {
-	mPaddle.update(dt);
+	mPaddle.update(dt, mBall);
 	mBall.update(dt);
 
 	BoundaryEdge edge;
+
+	if(mPaddle.Bounce(mBall))
+	{
+		return;
+	}
+
 	if (mLevelBoundary.HasCollided(mBall, edge))
 	{
-		cout<<"Collision detected"<<endl;
 		mBall.Bounce(edge);
+		return;
 	}
 	
 	// cout<<"BreakOut Update"<<endl;
@@ -71,7 +77,6 @@ void BreakOut::ResetGame()
 {
 	Vec2D TopLeft = Vec2D( (App::Singleton().Width()/2) - (paddle_width/2), App::Singleton().Height()-(3*paddle_height) );
 	AARectangle paddleBoundary(TopLeft, paddle_width, paddle_height);
-
 	AARectangle GameBoundary = AARectangle(Vec2D::Zero(), App::Singleton().Width(), App::Singleton().Height());
 	
 	mLevelBoundary = GameBoundary;

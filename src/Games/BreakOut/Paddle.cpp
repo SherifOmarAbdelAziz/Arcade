@@ -5,9 +5,10 @@
  *      Author: sherif
  */
 
-#include <Paddle.h>
+#include "Paddle.h"
+#include <cassert>
 #include "Color.h"
-//#include <iostream>
+
 
 void Paddle::Init(const AARectangle& Rect, const AARectangle& Boundary) {
 	Excluder::Init(Rect);
@@ -16,9 +17,16 @@ void Paddle::Init(const AARectangle& Rect, const AARectangle& Boundary) {
 	mBoundary = Boundary;
 }
 
-void Paddle::update(uint32_t dt) {
+void Paddle::update(uint32_t dt, Ball& ball) 
+{
+	if(GetAARectangle().ContainsPoint(ball.GetPosition()))
+	{
+		Vec2D pointOnEdge;
+		ball.MakeFlushWithEdge(GetBoundaryEdge(BOTTOM_EDGE), pointOnEdge, true);
+	}
 
-	if(mPaddleDirection) {
+	if(mPaddleDirection) 
+	{
 		Vec2D dir(0,0);
 
 		if ((mPaddleDirection == (PaddleDirection::RIGHT | PaddleDirection::LEFT))) {
@@ -63,4 +71,35 @@ void Paddle::draw(Screen &mScreen) {
 }
 
 
+bool Paddle::Bounce(Ball& ball)
+{		
+	bool retVal = false;
+	BoundaryEdge edge;
+	// check if collided with ball
+	if(HasCollided(ball.GetBoundingRect(), edge))
+	{
+		// if collided, then flush intersection		
+		Vec2D pointOnEdge;
+		ball.MakeFlushWithEdge(edge, pointOnEdge, true);
+		if(edge.edge == GetBoundaryEdge(UPPER_EDGE).edge)
+		{
+			// then check percentage of collision on edge
+			float edgeLength = edge.edge.Length();
+			assert(!IsEqual(edgeLength, 0));
+			float tx = (pointOnEdge.GetVec2Dx() - edge.edge.Getmp0().GetVec2Dx())/edgeLength;
 
+			if((tx <= CORNER_BOUNCE_AMT && ball.GetVelocity().GetVec2Dx() > 0)
+				|| (tx >= (1.0f - CORNER_BOUNCE_AMT) && (ball.GetVelocity().GetVec2Dx() < 0)))
+			{
+				ball.SetVelocity(ball.GetVelocity() * -1);
+				// ball.SetVelocity(ball.GetVelocity().Reflect(edge.normal));	
+				retVal = true;
+			}
+		}
+
+		ball.SetVelocity(ball.GetVelocity().Reflect(edge.normal));
+		retVal = true;
+
+	}
+	return retVal;
+}
