@@ -26,6 +26,10 @@ add_library(
     Games/BreakOut/Paddle.cpp
     Games/BreakOut/LevelBoundary.h
     Games/BreakOut/LevelBoundary.cpp
+    Games/BreakOut/Block.h
+    Games/BreakOut/Block.cpp
+    Games/BreakOut/BreakOutGameLevel.h
+    Games/BreakOut/BreakOutGameLevel.cpp        
 )
 
 add_library(

@@ -30,7 +30,7 @@ public:
 	inline Vec2D GetPosition() const {return mBox.GetCenterPoint();}
 	inline float GetRadius() const {return radius;}
 
-	inline const AARectangle GetBoundingRect() {return mBox;}
+	inline const AARectangle GetBoundingRect() const {return mBox;}
 
 	void Bounce(const BoundaryEdge& edge);
 

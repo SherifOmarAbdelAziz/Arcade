@@ -11,7 +11,7 @@
 #include "BoundaryEdge.h"
 #include <iostream>
 
-const float Ball::radius = 5.0f;
+const float Ball::radius = 10.0f;
 
 
 Ball::Ball() : Ball(Vec2D::Zero(), Ball::radius) {

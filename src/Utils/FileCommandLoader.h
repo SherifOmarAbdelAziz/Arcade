@@ -14,41 +14,41 @@
 #include "Color.h"
 #include "Vec2D.h"
 
-using namespace std;
 
-
-enum CommandType {
+enum CommandType 
+{
 	COMMAND_ONE_LINE = 0,
 	COMMAND_MULTI_LINE
 };
 
-struct FuncParams {
-	string line;
+struct FuncParams 
+{
+	std::string line;
 	size_t delimiter;
-	int line_num;
+	int lineNum;
 };
 
-using Command_Func = function<void(const FuncParams& Params)>;
+using commandFunc = std::function<void(const FuncParams& Params)>;
 
 struct Command {
-	CommandType mCommandType = COMMAND_ONE_LINE;
-	string mCommand = "";
-	Command_Func Command_function = nullptr;
+	CommandType commandType = COMMAND_ONE_LINE;
+	std::string command = "";
+	commandFunc parseCommandFunc = nullptr;
 };
 
 class FileCommandLoader {
 public:
-	void AddCommand(const Command& c);
-	bool LoadFile(const string& FilePath);
+	void addCommand(const Command& c);
+	bool loadFile(const std::string& filePath);
 
 	static int readint(const FuncParams& Params);
 	static char readchar(const FuncParams& Params);
-	static string readString(const FuncParams& Params);
+	static std::string readString(const FuncParams& Params);
 	static Vec2D readSize(const FuncParams& Params);
 	static Color readColor(const FuncParams& Params);
 
 private:
-	vector<Command> mCommands;
+	std::vector<Command> mCommands;
 };
 
 

@@ -38,8 +38,8 @@ public:
 
 private:
 	uint32_t mPaddleDirection;
-	const float VELOCITY = 150.0f;
-	const float CORNER_BOUNCE_AMT = 0.2f;
+	const float VELOCITY = 500.0f;
+	const float CORNER_BOUNCE_AMT = 0.4f;
 	AARectangle mBoundary;
 
 };

@@ -17,7 +17,7 @@ void Excluder::Init(const AARectangle& rect, bool mReverse) {
 	setupEdges();
 }
 
-bool Excluder::HasCollided(const AARectangle& Rect, BoundaryEdge& edge) 
+bool Excluder::HasCollided(const AARectangle& Rect, BoundaryEdge& edge) const
 {
 	bool retVal = false;
 	if(mRect.intersects(Rect)) 
@@ -62,35 +62,36 @@ bool Excluder::HasCollided(const AARectangle& Rect, BoundaryEdge& edge)
 	return retVal;
 }
 
-Vec2D Excluder::GetCollisionOffset(const AARectangle& Rect) 
+Vec2D Excluder::GetCollisionOffset(const AARectangle& Rect) const
 {
 	BoundaryEdge myedge;
-	Vec2D Offset;
+	Vec2D Offset = Vec2D::Zero();
 	if (HasCollided(Rect,myedge)) 
 	{
-		float ymin, ymax, xmin, xmax, xsize, ysize;
-		ymin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
-		ymax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? Rect.GetBottomRightPoint().GetVec2Dy() : mRect.GetBottomRightPoint().GetVec2Dy();
+		float yMin = 0.0, yMax = 0.0, xMin = 0.0, xMax = 0.0, xSize = 0.0, ySize = 0.0;
+		yMin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
+		yMax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? Rect.GetBottomRightPoint().GetVec2Dy() : mRect.GetBottomRightPoint().GetVec2Dy();
 
-		xmin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
-		xmax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? Rect.GetBottomRightPoint().GetVec2Dy() : mRect.GetBottomRightPoint().GetVec2Dy();
+		xMin = (mRect.GetTopLeftPoint().GetVec2Dy() >= Rect.GetTopLeftPoint().GetVec2Dy())? mRect.GetTopLeftPoint().GetVec2Dy() : Rect.GetTopLeftPoint().GetVec2Dy();
+		xMax = (mRect.GetBottomRightPoint().GetVec2Dy() <= Rect.GetBottomRightPoint().GetVec2Dy())? Rect.GetBottomRightPoint().GetVec2Dy() : mRect.GetBottomRightPoint().GetVec2Dy();
 
-		xsize = xmax - xmin;
-		ysize = ymax - ymin;
+		xSize = xMax - xMin;
+		ySize = yMax - yMin;
 
 		if (!IsEqual(myedge.normal.GetVec2Dy(), 0)) 
 		{
-			Offset = myedge.normal * (ysize+1);
+			Offset = myedge.normal * (ySize+1);
 		}
 		else 
 		{
-			Offset = myedge.normal  * (xsize+1);
+			Offset = myedge.normal  * (xSize+1);
 		}
 	}
 	return Offset;
 }
 
-const AARectangle& Excluder::GetAARectangle() const {
+const AARectangle& Excluder::GetAARectangle() const 
+{
 	return mRect;
 }
 

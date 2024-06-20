@@ -5,10 +5,9 @@
  *      Author: sherif
  */
 
-#include "Paddle.h"
 #include <cassert>
+#include "Paddle.h"
 #include "Color.h"
-
 
 void Paddle::Init(const AARectangle& Rect, const AARectangle& Boundary) {
 	Excluder::Init(Rect);
@@ -48,17 +47,17 @@ void Paddle::update(uint32_t dt, Ball& ball)
 
 		const AARectangle& paddleBoundary = GetAARectangle();
 
+		Vec2D positionUpdated = Vec2D::Zero();
 		if (IsGreaterThanOrEqual(mBoundary.GetTopLeftPoint().GetVec2Dx(), paddleBoundary.GetTopLeftPoint().GetVec2Dx()))
 		{
-			Vec2D x = Vec2D(mBoundary.GetTopLeftPoint().GetVec2Dx(), paddleBoundary.GetTopLeftPoint().GetVec2Dy());
-			MoveTo(x);
+			positionUpdated = Vec2D(mBoundary.GetTopLeftPoint().GetVec2Dx(), paddleBoundary.GetTopLeftPoint().GetVec2Dy());
+			MoveTo(positionUpdated);
 		}
 		else if (IsGreaterThanOrEqual(paddleBoundary.GetBottomRightPoint().GetVec2Dx(), mBoundary.GetBottomRightPoint().GetVec2Dx()))
 		{
-			Vec2D x = Vec2D(mBoundary.GetBottomRightPoint().GetVec2Dx()-paddleBoundary.GetWidth(), paddleBoundary.GetTopLeftPoint().GetVec2Dy());
-			MoveTo(x);
+			positionUpdated = Vec2D(mBoundary.GetBottomRightPoint().GetVec2Dx()-paddleBoundary.GetWidth(), paddleBoundary.GetTopLeftPoint().GetVec2Dy());
+			MoveTo(positionUpdated);
 		}
-
 	}
 }
 
@@ -69,7 +68,6 @@ void Paddle::draw(Screen &mScreen) {
 	//cout<<myRectangle.GetTopLeftPoint().GetVec2Dx()<<", "<<myRectangle.GetTopLeftPoint().GetVec2Dy()<<endl;
 	mScreen.draw(GetAARectangle(), Color::Blue(), true, Color::Blue());
 }
-
 
 bool Paddle::Bounce(Ball& ball)
 {		

@@ -38,6 +38,7 @@ public:
 	void PopScene ();
 	Scene* TopScene();
 
+	inline static const std::string getBasePath() {return SDL_GetBasePath();}
 
 private:
 	Screen mScreen;

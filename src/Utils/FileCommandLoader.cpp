@@ -10,63 +10,74 @@
 #include <fstream>
 #include <iostream>
 
-void FileCommandLoader::AddCommand(const Command& c) {
+void FileCommandLoader::addCommand(const Command& c) {
 	mCommands.push_back(c);
 }
 
-bool FileCommandLoader::LoadFile(const string& FilePath) {
+bool FileCommandLoader::loadFile(const std::string& filePath) 
+{
+	bool retVal = false;
+	std::ifstream infile;
+	infile.open(filePath);
 
-	ifstream infile;
-	infile.open(FilePath);
-
-	if (!infile.is_open()) {
-		cout<<"File is not opened"<<endl;
-		return false;
+	if (!infile.is_open()) 
+	{
+		std::cout<<"File is not opened"<<std::endl;
 	}
-	else {
-
-		while (!infile.eof()) {
-			string line;
+	else 
+	{
+		while (!infile.eof()) 
+		{
+			std::string line;
 			getline(infile, line);
-			size_t commandpos = string::npos;
-			if ((commandpos = line.find(":")) != string::npos) {
-				string commandstr = "";
+			size_t commandpos = std::string::npos;
+			if ((commandpos = line.find(":")) != std::string::npos) 
+			{
+				std::string commandstr = "";
 				size_t delim = 0;
 
 				delim = line.find_first_of(" ", commandpos);
-				if (delim == string::npos) {
+				if (delim == std::string::npos) 
+				{
 					delim = line.length();
 				}
-				else {
+				else 
+				{
 					delim -= 1;
 				}
 
 				commandstr = line.substr(commandpos+1, delim-commandpos);
 				delim += 1;
-				for (auto commandindex : mCommands) {
-					if (commandstr == commandindex.mCommand) {
-						if (commandindex.mCommandType == COMMAND_ONE_LINE) {
+				for (auto commandindex : mCommands) 
+				{
+					if (commandstr == commandindex.command) {
+						if (commandindex.commandType == COMMAND_ONE_LINE) 
+						{
 							FuncParams Params;
 							Params.line = line;
 							Params.delimiter = delim;
-							Params.line_num = 0;
-							commandindex.Command_function(Params);
+							Params.lineNum = 0;
+							commandindex.parseCommandFunc(Params);
 						}
-						else {
+						else 
+						{
 							int total_lines =  stoi(line.substr(delim+1));
-							int line_num = 0;
-							while(line_num < total_lines) {
+							int lineNum = 0;
+							while(lineNum < total_lines) 
+							{
 								getline(infile, line);
-								if (line.empty()) {
+								if (line.empty()) 
+								{
 									continue;
 								}
-								else {
+								else 
+								{
 									FuncParams Params;
 									Params.line = line;
 									Params.delimiter = 0;
-									Params.line_num = line_num;
-									commandindex.Command_function(Params);
-									line_num++;
+									Params.lineNum = lineNum;
+									commandindex.parseCommandFunc(Params);
+									lineNum++;
 								}
 							}
 						}
@@ -75,23 +86,28 @@ bool FileCommandLoader::LoadFile(const string& FilePath) {
 
 			}
 		}
-		return true;
+		retVal = true;
 	}
+	return retVal;
 }
 
-int FileCommandLoader::readint(const FuncParams& Params) {
+int FileCommandLoader::readint(const FuncParams& Params) 
+{
 	return stoi(Params.line.substr(Params.delimiter+1));
 }
 
-char FileCommandLoader::readchar(const FuncParams& Params) {
+char FileCommandLoader::readchar(const FuncParams& Params) 
+{
 	return Params.line.substr(Params.delimiter+1)[0];
 }
 
-string FileCommandLoader::readString(const FuncParams& Params) {
+std::string FileCommandLoader::readString(const FuncParams& Params) 
+{
 	return Params.line.substr(Params.delimiter+1);
 }
 
-Vec2D FileCommandLoader::readSize(const FuncParams& Params) {
+Vec2D FileCommandLoader::readSize(const FuncParams& Params) 
+{
 	size_t nextpos = Params.line.find_first_of(" ", Params.delimiter+1);
 	int width = stoi(Params.line.substr(nextpos+1, nextpos-Params.delimiter));
 	size_t Lastpos = nextpos;
@@ -101,7 +117,8 @@ Vec2D FileCommandLoader::readSize(const FuncParams& Params) {
 	return Vec2D(width, height);
 }
 
-Color FileCommandLoader::readColor(const FuncParams& Params) {
+Color FileCommandLoader::readColor(const FuncParams& Params) 
+{
 	size_t nextpos = Params.line.find_first_of(" ", Params.delimiter+1);
 	int r = stoi(Params.line.substr(nextpos+1, nextpos-Params.delimiter));
     // 255 255 255
@@ -116,6 +133,5 @@ Color FileCommandLoader::readColor(const FuncParams& Params) {
 	int a = stoi(Params.line.substr(nextpos+1));
 
 	return Color(r, g, b, a);
-
 }
 

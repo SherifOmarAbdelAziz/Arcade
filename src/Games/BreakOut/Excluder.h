@@ -15,8 +15,8 @@ class Excluder {
 public:
 	virtual ~Excluder() {}
 	void Init(const AARectangle& Rect, bool mReverse = false);
-	bool HasCollided(const AARectangle& Rect, BoundaryEdge& edge);
-	Vec2D GetCollisionOffset(const AARectangle& Rect);
+	bool HasCollided(const AARectangle& Rect, BoundaryEdge& edge) const;
+	Vec2D GetCollisionOffset(const AARectangle& Rect) const;
 
 	const AARectangle& GetAARectangle () const;
 	const BoundaryEdge& GetBoundaryEdge(const EdgeType& edgeType) const;

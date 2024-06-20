@@ -17,10 +17,10 @@
 #include "App/App.h"
 using namespace std;
 
-const int SCREEN_WIDTH = 224;
-const int SCREEN_HEIGHT = 288;
-// const int SCREEN_WIDTH = 1024;
-// const int SCREEN_HEIGHT = 1024;
+// const int SCREEN_WIDTH = 224;
+// const int SCREEN_HEIGHT = 288;
+const int SCREEN_WIDTH = 512;
+const int SCREEN_HEIGHT = 512;
 const int Magnification = 1;
 //void SetPixel(SDL_Surface *surface, uint32_t color, int x, int y);
 //size_t GetIndex(SDL_Surface *surface, int r, int c);

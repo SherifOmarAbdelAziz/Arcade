@@ -43,9 +43,12 @@ void App::Run() {
 	uint32_t FrameTime = 0;
 	uint32_t Accumulator = 0;
 
-
     bool running = true;
-    CurrentInputController.Init([&running](uint32_t dt, uint8_t state){running = false;});
+    CurrentInputController.Init(	[&running](uint32_t dt, uint8_t state)
+									{
+										running = false;
+									}
+							   );
 
     while(running) 
 	{
